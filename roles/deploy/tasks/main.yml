@@ -1,0 +1,15 @@
+- name: Installing base packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - git
+
+- name: Installing python pip
+  easy_install:
+    name: pip
+    state: latest
+
+- name: Installing aws cli
+  pip:
+    name: awscli

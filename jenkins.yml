@@ -1,0 +1,54 @@
+- name: Create Jenkins master instance
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ jenkins }}"
+        port: 22
+        delay: 10
+        timeout: 30
+        state: started
+
+- name: Configure instance(s)
+  hosts: all
+  become: True
+  vars:
+    jenkins_package_state: latest
+    java_packages:
+      - java-1.8.0-openjdk
+    jenkins_plugins:
+      - github
+      - pipeline-input-step
+      - pipeline-stage-tags-metadata
+      - pipeline-build-step
+      - pipeline-github-lib
+      - pipeline-stage-step
+      - pipeline-graph-analysis
+      - pipeline-npm
+      - pipeline-github
+      - build-pipeline-plugin
+      - pipeline-utility-steps
+      - pipeline-aggregator-view
+      - pipeline-githubnotify-step
+      - pipeline-rest-api
+      - pipeline-stage-view
+      - pipeline-milestone-step
+      - pipeline-model-api
+      - pipeline-model-extensions
+      - pipeline-model-declarative-agent
+      - pipeline-model-definition
+      - simple-build-for-pipeline
+      - pipeline-multibranch-defaults
+      - pipeline-aws
+      - jira-steps
+      - github-autostatus
+      - github-organization-folder
+      - ansicolor
+
+  gather_facts: True
+  roles:
+    - base
+    - deploy
+    - geerlingguy.java
+    - geerlingguy.jenkins
